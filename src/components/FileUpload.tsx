@@ -59,11 +59,10 @@ export const FileUpload = () => {
         },
         {
           onSuccess: (data)=>{
-            toast({
-              description: data.message
-            })
+            console.log(data)
           },
           onError: (data)=>{
+            console.log(data)
             toast({
               description: "Error creating chat"
             })
