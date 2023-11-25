@@ -6,13 +6,14 @@ import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useMutation } from "react-query";
 import axios from "axios";
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
+import {useRouter} from "next/navigation";
 
 
 export const FileUpload = () => {
 
   const {toast} =  useToast()
-
+  const router = useRouter()
   const [uploading, setUploading] = useState(false);
 
   const { mutate, isLoading } = useMutation({
@@ -58,8 +59,11 @@ export const FileUpload = () => {
           file_name: data.file_name
         },
         {
-          onSuccess: (data)=>{
-            console.log(data)
+          onSuccess: ({chat_id})=>{
+            toast({
+              description: "chat has been created"
+            })
+            router.push(`/chat/${chat_id}`)
           },
           onError: (data)=>{
             console.log(data)
