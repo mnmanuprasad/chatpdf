@@ -4,9 +4,10 @@ import {PDFLoader} from "langchain/document_loaders/fs/pdf";
 import {Document, RecursiveCharacterTextSplitter} from "@pinecone-database/doc-splitter"
 import { getEmbeddings } from "./embeddings";
 import md5 from "md5";
+import { sleep } from "langchain/util/time";
 import { convertToAscii } from "./utils";
 
-let pinecone: Pinecone | undefined = undefined;
+let pinecone: Pinecone | null = null;
 
 type PDFPage = {
     pageContent: string;
@@ -18,8 +19,8 @@ type PDFPage = {
 export const getPineconeClient = async()=>{
     if (!pinecone){
          pinecone = new Pinecone({
-            apiKey: process.env.PINECONE_ENVIORNMENT!,
-            environment: process.env.PINECONE_API_KEY!
+            apiKey:  process.env.PINECONE_API_KEY! ,
+            environment: process.env.PINECONE_ENVIORNMENT!
         }); 
     }
 
@@ -49,15 +50,27 @@ export const  loadS3IntoPinecone =  async(fileKey: string)=>{
 
     // 3. vectorise and embed individual documents
 
-    const vectors = await Promise.all(documents.flat().map(embedDocument))
+    // const vectors = await Promise.all(documents.flat().map(embedDocument))
+
+    const vectors: PineconeRecord[] = [];
+
+    for(let i=0;i<documents.length;i++){
+        for(let j=0; j<documents[i].length; j++){
+            vectors.push(await embedDocument(documents[i][j]))
+        }
+    }
     
+    console.log("Created embeddings for all the documents");
+
     // 4. upload to pinecone
 
     const client = await getPineconeClient()
+
     const pineconeIndex = client.Index("chatpdf")
 
     console.log("Inserting vectors into pineconde");
-    const namespace = convertToAscii(fileKey)
+
+    // const namespace = convertToAscii(fileKey)
 
     pineconeIndex.upsert(vectors)
 
@@ -95,8 +108,11 @@ const prepareDocument = async(page: PDFPage) =>{
 
 const embedDocument= async (doc: Document)=>{
     try {
-        const embeddings = await getEmbeddings(doc.pageContent);
 
+        // Requests per min (RPM) for Open AI free trial is 3 Limit 3, 
+        await sleep(1000*25)
+        const embeddings = await getEmbeddings(doc.pageContent);
+       
         const hash = md5(doc.pageContent)
 
         return{
