@@ -70,8 +70,13 @@ export const  loadS3IntoPinecone =  async(fileKey: string)=>{
 
     console.log("Inserting vectors into pineconde");
 
-    // const namespace = convertToAscii(fileKey)
+    const namespaceName = convertToAscii(fileKey)
 
+    // Projects in the gcp-starter environment do not currently support namespaces.
+    if (process.env.PINCECONE_NAMESPACE_AVAILABLE){
+          pineconeIndex.namespace(namespaceName)
+    }
+  
     pineconeIndex.upsert(vectors)
 
     return pages; 

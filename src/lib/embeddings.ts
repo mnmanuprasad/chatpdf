@@ -14,10 +14,9 @@ export const getEmbeddings = async(text: string)=>{
             input: text
         })
 
-        console.log(response)
         const result = await response.json()
        
-        return result.data[0].embedding as number
+        return result.data[0].embedding as number []
     } catch (error) {
         console.log("error while calling open ai api: ", error)
 
