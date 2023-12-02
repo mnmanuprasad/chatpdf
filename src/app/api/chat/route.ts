@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { Message } from "ai/react";
 
-export const runtime = "edge"
+// export const runtime = "edge"
 
 const config = new Configuration({
     apiKey: process.env.OPENAI_API_KEY
