@@ -19,7 +19,6 @@ export async function POST(req: Request){
     try {
         const {messages, chatId} = await req.json()
 
-        console.log(messages)
         const _chats = await db.select().from(chats).where(eq(chats.id, chatId))
 
         if(_chats.length !=1){
@@ -33,7 +32,6 @@ export async function POST(req: Request){
         
         const context = await getContext(lastMessage.content, fileKey)
 
-        console.log(context)
 
         const prompt = {
             role: "system",

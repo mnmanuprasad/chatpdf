@@ -4,7 +4,6 @@ import {PDFLoader} from "langchain/document_loaders/fs/pdf";
 import {Document, RecursiveCharacterTextSplitter} from "@pinecone-database/doc-splitter"
 import { getEmbeddings } from "./embeddings";
 import md5 from "md5";
-import { sleep } from "langchain/util/time";
 import { convertToAscii } from "./utils";
 
 let pinecone: Pinecone | null = null;
@@ -107,17 +106,13 @@ const prepareDocument = async(page: PDFPage) =>{
         })
     ]
     )
-
     return docs
 }
 
 const embedDocument= async (doc: Document)=>{
     try {
 
-        // Requests per min (RPM) for Open AI free trial is 3 Limit 3, 
-        await sleep(1000*25)
         const embeddings = await getEmbeddings(doc.pageContent);
-       
         const hash = md5(doc.pageContent)
 
         return{
