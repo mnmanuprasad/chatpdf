@@ -42,7 +42,7 @@ const ChatPage = async (props: Props)=>{
                    <ChatSideBar chats={_chats} chatId={parseInt(props.params.chatId)}/>
                 </div>
                 {/* PDF Viewer */}
-                <div className="max-h-screen p-4 overflow-auto flex-[5]">
+                <div className="hidden lg:block max-h-screen p-4 overflow-auto flex-[5]">
                     <PDFViewer pdf_url={currentChat?.pdfUrl || ""} />
                 </div>
                 {/* Chat componenet */}
