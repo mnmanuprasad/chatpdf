@@ -49,15 +49,15 @@ export const  loadS3IntoPinecone =  async(fileKey: string)=>{
 
     // 3. vectorise and embed individual documents
 
-    // const vectors = await Promise.all(documents.flat().map(embedDocument))
+    const vectors = await Promise.all(documents.flat().map(embedDocument))
 
-    const vectors: PineconeRecord[] = [];
+    // const vectors: PineconeRecord[] = [];
 
-    for(let i=0;i<documents.length;i++){
-        for(let j=0; j<documents[i].length; j++){
-            vectors.push(await embedDocument(documents[i][j]))
-        }
-    }
+    // for(let i=0;i<documents.length;i++){
+    //     for(let j=0; j<documents[i].length; j++){
+    //         vectors.push(await embedDocument(documents[i][j]))
+    //     }
+    // }
     
     console.log("Created embeddings for all the documents");
 
