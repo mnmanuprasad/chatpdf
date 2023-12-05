@@ -7,6 +7,8 @@ import { auth } from "@clerk/nextjs";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import React from "react";
+import { Suspense } from "react";
+import { ChatSkelton } from "@/components/skeleton/ChatSkelton";
 
 type Props = {
     params:{
@@ -42,12 +44,14 @@ const ChatPage = async (props: Props)=>{
                    <ChatSideBar chats={_chats} chatId={parseInt(props.params.chatId)}/>
                 </div>
                 {/* PDF Viewer */}
-                <div className="hidden lg:block max-h-screen p-4 overflow-auto flex-[5]">
+                <div className="hidden lg:block max-h-screen p-4 overflow-auto flex-[4]">
                     <PDFViewer pdf_url={currentChat?.pdfUrl || ""} />
                 </div>
                 {/* Chat componenet */}
                 <div className="flex-[3] border-l-4 border-l-slate-400"> 
+                <Suspense fallback={<ChatSkelton />}>
                     <ChatComponent  chatId={parseInt(props.params.chatId)}/>
+                </Suspense>
                 </div>
             </div>
         

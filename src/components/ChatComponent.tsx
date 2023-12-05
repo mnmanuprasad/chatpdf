@@ -8,8 +8,7 @@ import MessageList from "./MessageList"
 import { useQuery } from "react-query"
 import axios from "axios";
 import { Message } from "ai";
-import { Suspense } from "react";
-import { ChatSkelton } from "./skeleton/ChatSkelton"
+
 
 type Props = {
   chatId: number
@@ -51,9 +50,7 @@ const ChatComponent = ({chatId}: Props) => {
 
         {/* Message List */}
 
-        <Suspense fallback={<ChatSkelton />}>
           <MessageList messages={messages} isLoading={isLoading}/>
-        </Suspense>
 
         <form  onSubmit={handleSubmit} className="sticky bottom-0 inset-x-0 px-2 py-4 bg-white">
             <div className="flex gap-2">
